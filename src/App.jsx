@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const [message, setMessage] = useState("Loading...");
 
   useEffect(() => {
-    fetch("/api/hello") // Vite proxies this to the backend
+    fetch(`${API_URL}/api/hello`) // ✅ Correct usage of template literal
       .then((res) => res.json())
       .then((data) => setMessage(data.message))
       .catch((err) => setMessage("Failed to fetch"));
