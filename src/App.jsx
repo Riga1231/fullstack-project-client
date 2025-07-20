@@ -1,20 +1,32 @@
 import { useEffect, useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
+  const [counter, setCounter] = useState(null);
+
+  const fetchCounter = async () => {
+    const res = await fetch(`${API_URL}/api/counter`);
+    const data = await res.json();
+    setCounter(data.counter);
+  };
+
+  const incrementCounter = async () => {
+    const res = await fetch(`${API_URL}/api/counter/increment`, {
+      method: "POST",
+    });
+    const data = await res.json();
+    setCounter(data.counter);
+  };
 
   useEffect(() => {
-    fetch(`${API_URL}/`) // ✅ Correct usage of template literal
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((err) => setMessage("Failed to fetch"));
+    fetchCounter();
   }, []);
 
   return (
     <div>
-      <h1>{message}</h1>
+      <h1>Backend Counter: {counter}</h1>
+      <button onClick={incrementCounter}>Increment</button>
     </div>
   );
 }
